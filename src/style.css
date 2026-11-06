@@ -1,0 +1,412 @@
+:root {
+  color-scheme: light dark;
+  --paper: #f6f5f1;
+  --ink: #121211;
+  --muted: #706e68;
+  --line: #dcdad3;
+  --now: #e5482d;
+  --on-ink: #f6f5f1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121211;
+    --ink: #f1efe9;
+    --muted: #96948d;
+    --line: #2e2d2a;
+    --now: #ff5f3f;
+    --on-ink: #121211;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang TC', 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+  /* Stops double-tap zoom when tapping + and - quickly. */
+  touch-action: manipulation;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--now);
+  outline-offset: 2px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 440px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: max(20px, env(safe-area-inset-top)) 16px 0;
+}
+
+/* Tempo */
+
+.tempo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tempo-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 56px;
+  align-items: center;
+  width: 100%;
+}
+
+.bpm {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: center;
+  font-size: clamp(96px, 30vw, 132px);
+  font-weight: 200;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  border-radius: 4px;
+}
+
+.nudge {
+  height: 56px;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.nudge:hover {
+  color: var(--ink);
+}
+
+.slider {
+  width: 100%;
+  height: 32px;
+  margin-top: 4px;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--ink);
+}
+
+.slider::-moz-range-track {
+  height: 1px;
+  background: var(--ink);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 22px;
+  margin-top: -11px;
+  background: var(--ink);
+  border-radius: 2px;
+}
+
+.slider::-moz-range-thumb {
+  width: 10px;
+  height: 22px;
+  background: var(--ink);
+  border: 0;
+  border-radius: 2px;
+}
+
+.status {
+  min-height: 22px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.status.counting {
+  color: var(--now);
+  font-weight: 600;
+}
+
+/* Accent grid */
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+}
+
+.group {
+  display: flex;
+  gap: 3px;
+}
+
+.cell {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 32px;
+  height: 44px;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+/* Off-beat notes sit lower and shorter, so the beat shape reads at a glance. */
+.cell.off-beat {
+  width: 26px;
+  height: 30px;
+  margin-top: 14px;
+  border-color: var(--muted);
+}
+
+.cell:checked {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.cell.now {
+  background: var(--now);
+  border-color: var(--now);
+}
+
+.cell:checked.now {
+  /* An ink ring keeps "accented" visible while the playhead passes through. */
+  box-shadow: inset 0 0 0 4px var(--ink);
+}
+
+/* Settings */
+
+.settings {
+  display: flex;
+  flex-direction: column;
+}
+
+.notes {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  margin-bottom: 8px;
+}
+
+.notes button {
+  display: grid;
+  place-items: center;
+  height: 46px;
+  border-radius: 2px;
+}
+
+.notes button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+.notes button:disabled {
+  opacity: 0.22;
+  cursor: not-allowed;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  border-top: 1px solid var(--line);
+}
+
+.label {
+  color: var(--muted);
+}
+
+.slider.volume {
+  flex: 1;
+  width: auto;
+  max-width: 240px;
+  margin-top: 0;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+}
+
+.stepper button {
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.stepper button:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.stepper-value {
+  min-width: 28px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.segments {
+  display: flex;
+  gap: 2px;
+}
+
+.segments button {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 2px;
+}
+
+.segments button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+.switch {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 26px;
+  margin-right: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 17px;
+  height: 17px;
+  background: var(--ink);
+  border-radius: 1px;
+}
+
+.switch:checked {
+  background: var(--ink);
+}
+
+.switch:checked::after {
+  left: 21px;
+  background: var(--on-ink);
+}
+
+.auto {
+  padding-bottom: 14px;
+}
+
+.auto[hidden] {
+  display: none;
+}
+
+.auto-fields {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+}
+
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.field input {
+  width: 56px;
+  height: 40px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  background: none;
+  color: var(--ink);
+  /* 16px keeps iOS Safari from zooming in on focus. */
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.field input::-webkit-outer-spin-button,
+.field input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.field input.wide {
+  width: 104px;
+}
+
+.hint {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Transport */
+
+.transport {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding: 8px 0 max(16px, env(safe-area-inset-bottom));
+  background: var(--paper);
+}
+
+.play {
+  display: block;
+  width: 100%;
+  height: 60px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 18px;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  border-radius: 2px;
+}
+
+.play.playing {
+  background: var(--now);
+  color: #fff;
+}

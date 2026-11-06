@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="極簡節拍器：可勾選重音、選音符、預備拍與自動變速。" />
+    <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>節拍器</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="tempo" aria-label="速度">
+        <div class="tempo-row">
+          <button id="bpm-down" class="nudge" type="button" aria-label="減慢 1 BPM">−</button>
+          <input
+            id="bpm"
+            class="bpm"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            aria-label="BPM"
+          />
+          <button id="bpm-up" class="nudge" type="button" aria-label="加快 1 BPM">+</button>
+        </div>
+        <input id="bpm-slider" class="slider" type="range" min="20" max="300" step="1" aria-label="BPM 滑桿" />
+        <p id="status" class="status"></p>
+      </section>
+
+      <section id="grid" class="grid" role="group" aria-label="勾選重音"></section>
+
+      <section class="settings">
+        <div id="notes" class="notes" role="group" aria-label="音符"></div>
+
+        <div class="row">
+          <label class="label" for="volume">音量</label>
+          <input id="volume" class="slider volume" type="range" min="0" max="1" step="0.01" />
+        </div>
+
+        <div class="row">
+          <span class="label">每小節拍數</span>
+          <div class="stepper">
+            <button id="beats-down" type="button" aria-label="減少拍數">−</button>
+            <output id="beats" class="stepper-value"></output>
+            <button id="beats-up" type="button" aria-label="增加拍數">+</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <span class="label">預備拍</span>
+          <div id="count-in" class="segments" role="group" aria-label="預備拍">
+            <button type="button" data-bars="0">關</button>
+            <button type="button" data-bars="1">1 小節</button>
+            <button type="button" data-bars="2">2 小節</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="label" for="auto-on">自動變速</label>
+          <input id="auto-on" class="switch" type="checkbox" role="switch" />
+        </div>
+
+        <div id="auto-detail" class="auto" hidden>
+          <div class="auto-fields">
+            <label class="field">
+              每
+              <input id="auto-every" type="number" inputmode="numeric" min="1" max="999" />
+              小節
+            </label>
+            <label class="field">
+              BPM
+              <input id="auto-steps" class="wide" type="text" autocomplete="off" spellcheck="false" />
+            </label>
+          </div>
+          <p class="hint">用空格分開可以輪流套用，例如 +4 -2</p>
+        </div>
+      </section>
+
+      <div class="transport">
+        <button id="play" class="play" type="button">開始</button>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
