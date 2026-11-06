@@ -1,4 +1,5 @@
 import { noteIcon } from './icons';
+import { columnsFor } from './layout';
 import { Metronome } from './metronome';
 import { NOTES, fits, isOnBeat, remapAccents, type NoteId } from './notes';
 import { clampBpm, type Tick } from './sequencer';
@@ -11,6 +12,7 @@ function el<T extends HTMLElement>(id: string): T {
 const bpmInput = el<HTMLInputElement>('bpm');
 const bpmSlider = el<HTMLInputElement>('bpm-slider');
 const status = el('status');
+const gridWrap = el('grid-wrap');
 const grid = el('grid');
 const notes = el('notes');
 const volume = el<HTMLInputElement>('volume');
@@ -116,7 +118,21 @@ function renderGrid(): void {
     group.append(cell);
     return cell;
   });
+  layoutGrid();
 }
+
+/** Narrows the grid to the chosen column count; its flex-wrap then forms the rows. */
+function layoutGrid(): void {
+  const first = grid.firstElementChild;
+  if (!first) return;
+  const gap = parseFloat(getComputedStyle(grid).columnGap);
+  const width = first.getBoundingClientRect().width;
+  const fit = Math.floor((gridWrap.clientWidth + gap) / (width + gap));
+  const cols = columnsFor(grid.children.length, fit);
+  grid.style.maxWidth = `${Math.ceil(cols * width + (cols - 1) * gap)}px`;
+}
+
+new ResizeObserver(layoutGrid).observe(gridWrap);
 
 grid.addEventListener('change', (event) => {
   const cell = event.target as HTMLInputElement;

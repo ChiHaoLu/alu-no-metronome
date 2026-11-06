@@ -64,7 +64,36 @@ button {
   max-width: 440px;
   min-height: 100dvh;
   margin: 0 auto;
-  padding: max(20px, env(safe-area-inset-top)) 16px 0;
+  padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 0
+    max(16px, env(safe-area-inset-left));
+}
+
+/*
+ * The panes only matter on short landscape screens, where they become columns.
+ * Everywhere else they dissolve and `order` sets the single-column sequence.
+ */
+.pane {
+  display: contents;
+}
+
+.tempo {
+  order: 1;
+}
+
+.grid-wrap {
+  order: 2;
+}
+
+.settings {
+  order: 3;
+}
+
+.transport {
+  order: 4;
+}
+
+.footer {
+  order: 5;
 }
 
 /* Tempo */
@@ -159,15 +188,18 @@ button {
 
 /* Accent grid */
 
+/* max-width comes from layoutGrid() in main.ts. */
 .grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px 14px;
+  margin-inline: auto;
 }
 
 .group {
   display: flex;
+  flex: none;
   gap: 3px;
 }
 
@@ -389,6 +421,8 @@ button {
 .transport {
   position: sticky;
   bottom: 0;
+  /* Settings come later in the DOM and would otherwise scroll over the button. */
+  z-index: 1;
   margin-top: auto;
   padding: 8px 0 max(16px, env(safe-area-inset-bottom));
   background: var(--paper);
@@ -409,4 +443,107 @@ button {
 .play.playing {
   background: var(--now);
   color: #fff;
+}
+
+/* Footer */
+
+.footer {
+  padding: 4px 0 max(16px, env(safe-area-inset-bottom));
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.footer a {
+  /* Padding, not line height, so the links are easy to tap without spreading the text. */
+  display: inline-block;
+  padding: 3px 0;
+  color: inherit;
+  text-underline-offset: 2px;
+}
+
+.footer a:hover {
+  color: var(--ink);
+}
+
+/* Tablet and desktop: wider column, with the button kept near the controls. */
+
+@media (min-width: 600px) {
+  .app {
+    max-width: 560px;
+    padding-top: max(40px, 6vh);
+  }
+
+  .transport {
+    margin-top: 0;
+  }
+
+  .footer {
+    margin-top: auto;
+  }
+}
+
+/* Short landscape screens: tempo and start on the left, settings on the right. */
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .app {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    align-items: start;
+    max-width: 920px;
+    padding-top: 0;
+  }
+
+  .pane {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Stays in view while the settings column scrolls. */
+  .pane-main {
+    position: sticky;
+    top: 0;
+    gap: 12px;
+    height: 100dvh;
+    padding-top: max(8px, env(safe-area-inset-top));
+    overflow-y: auto;
+  }
+
+  .pane-side {
+    min-height: 100dvh;
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+
+  .bpm {
+    font-size: 72px;
+  }
+
+  .slider {
+    height: 24px;
+    margin-top: 0;
+  }
+
+  .slider.volume {
+    height: 32px;
+  }
+
+  .status {
+    margin-top: 2px;
+  }
+
+  .transport {
+    margin-top: auto;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  .play {
+    height: 52px;
+  }
+
+  .footer {
+    margin-top: auto;
+    padding-top: 12px;
+  }
 }

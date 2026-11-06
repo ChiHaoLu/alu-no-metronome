@@ -12,6 +12,7 @@
   </head>
   <body>
     <main class="app">
+      <div class="pane pane-main">
       <section class="tempo" aria-label="速度">
         <div class="tempo-row">
           <button id="bpm-down" class="nudge" type="button" aria-label="減慢 1 BPM">−</button>
@@ -29,8 +30,16 @@
         <p id="status" class="status"></p>
       </section>
 
-      <section id="grid" class="grid" role="group" aria-label="勾選重音"></section>
+      <section id="grid-wrap" class="grid-wrap" aria-label="勾選重音">
+        <div id="grid" class="grid" role="group"></div>
+      </section>
 
+      <div class="transport">
+        <button id="play" class="play" type="button">開始</button>
+      </div>
+      </div>
+
+      <div class="pane pane-side">
       <section class="settings">
         <div id="notes" class="notes" role="group" aria-label="音符"></div>
 
@@ -78,8 +87,15 @@
         </div>
       </section>
 
-      <div class="transport">
-        <button id="play" class="play" type="button">開始</button>
+      <footer class="footer">
+        <p>
+          Author:
+          <a href="https://www.instagram.com/gospel_mur/" target="_blank" rel="noopener noreferrer">ALu</a>
+          from
+          <a href="https://www.instagram.com/thehamasen/" target="_blank" rel="noopener noreferrer">濱線 Hamasen</a>
+        </p>
+        <p>v1.0.0 at 20261106</p>
+      </footer>
       </div>
     </main>
     <script type="module" src="/src/main.ts"></script>
